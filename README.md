@@ -54,8 +54,10 @@ Kaggle에서 실행하는 경우:
 
 | 단계 | 내용 | 목적 |
 | --- | --- | --- |
-| 1단계 Optuna K-Fold | 훈련 데이터를 K-Fold로 나누고 Optuna로 `lr`, `weight_decay`, `dropout_rate`를 탐색 | 하이퍼파라미터 선택 |
-| 2단계 최종 학습 | 선택된 하이퍼파라미터로 최종 모델을 학습하고 `Middle_Test_Data.csv`로 검증 | 최종 체크포인트 선택 |
+| 1단계 Optuna K-Fold | 원본 학습 세트(`Origin_Train_Data_10k.csv`)와 검증 세트(`Middle_Test_Data.csv`)를 사용해 K-Fold 기반 Optuna 탐색을 수행하고 `lr`, `weight_decay`, `dropout_rate`를 찾음 | 최적 하이퍼파라미터 선택 |
+| 2단계 최종 학습 | 증강 학습 세트(`Train_Data_10k_2.csv`)와 검증 세트(`Middle_Test_Data.csv`)를 함께 사용해 최종 모델을 학습 | 최종 체크포인트 선택 |
+
+1단계에서는 원본 데이터 기준으로 안정적인 하이퍼파라미터를 찾는 데 집중합니다. 2단계에서는 1단계에서 찾은 하이퍼파라미터를 사용하고, 증강 학습 세트와 검증 세트를 활용해 최종 모델을 학습합니다.
 
 ## 조기 종료 기준
 
