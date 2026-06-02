@@ -77,12 +77,35 @@ Kaggle에서 실행하는 경우:
 | 환경/GPU 프로필 | 1 Fold 기준 | 2단계 최종 학습 기준 |
 | --- | --- | --- |
 | `colab_a100` | 약 18분 | epoch당 약 6분, 4 epoch 예상 기준 약 24분 |
-| `colab_t4` | 약 132분 | epoch당 약 118분, 4 epoch 예상 기준 약 472분 |
+| `colab_t4` | 약 63분 | epoch당 약 59분, 4 epoch 예상 기준 약 236분 |
 | `kaggle_t4_x2` | 약 66분 | epoch당 약 59분, 4 epoch 예상 기준 약 236분 |
 
-`HARDWARE_PROFILE="auto"`이면 `RUN_ENV="kaggle"`일 때 `kaggle_t4_x2`, `RUN_ENV="colab"`일 때 `colab_a100` 기준을 사용합니다. Colab에서 A100이 아니라 단일 T4를 사용하는 경우 `HARDWARE_PROFILE="colab_t4"`로 바꾸면 됩니다. Colab 단일 T4 시간은 Kaggle T4 x2 기준의 약 2배로 추정했습니다.
+`HARDWARE_PROFILE="auto"`이면 `RUN_ENV="kaggle"`일 때 `kaggle_t4_x2`, `RUN_ENV="colab"`일 때 `colab_a100` 기준을 사용합니다. Colab에서 A100이 아니라 단일 T4를 사용하는 경우 `HARDWARE_PROFILE="colab_t4"`로 바꾸면 됩니다. Colab 단일 T4 시간은 실제 측정값인 fold당 약 63분을 반영했습니다.
+
+Kaggle 12시간 제한을 고려해 노트북의 기본값은 `OPTUNA_TRIALS=3`, `N_FOLDS=2`로 설정했습니다. `kaggle_t4_x2` 기준으로 1단계는 약 6시간 36분, 2단계 4 epoch 예상은 약 3시간 56분이므로 전체 예상 시간은 약 10시간 32분입니다.
 
 필요하면 노트북에서 `CUSTOM_FOLD_TIME_MINS` 또는 `CUSTOM_STAGE2_EPOCH_TIME_MINS` 값을 0보다 크게 설정해 예상 시간을 직접 덮어쓸 수 있습니다.
+
+## 실험 기록
+
+3 trials / 2 folds 설정으로 1단계 Optuna K-Fold 탐색을 실행했을 때 확인된 최적 하이퍼파라미터는 아래와 같습니다.
+
+| Hyperparameter | Value |
+| --- | ---: |
+| `lr` | `1.9739941119675086e-05` |
+| `weight_decay` | `0.02266127742232566` |
+| `dropout_rate` | `0.25346148981751515` |
+
+해당 값은 다음 로그에서 확인되었습니다.
+
+```text
+✅ [1단계 완료] 최적 하이퍼파라미터 탐색 완료:
+{'lr': 1.9739941119675086e-05, 'weight_decay': 0.02266127742232566, 'dropout_rate': 0.25346148981751515}
+```
+
+### Optuna 탐색 범위 설정 근거
+
+모델 개선-6 기준으로, Learning Rate는 우수 성능 구간인 `2.2e-5 ~ 2.3e-5`를 포함하도록 `1.8e-5 ~ 2.6e-5` 범위로 제한했습니다. Weight Decay는 최고 성능을 낸 `0.034568`을 중심에 포함하도록 `0.01 ~ 0.06` 범위로 제한했습니다. Dropout Rate는 기존 `0.3` 적용 경험을 기준으로 `0.2 ~ 0.4` 범위에서 추가 탐색했습니다.
 
 ## 결과물
 
