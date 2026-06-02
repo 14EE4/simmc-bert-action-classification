@@ -72,12 +72,15 @@ Kaggle에서 실행하는 경우:
 
 ## 예상 훈련 시간
 
-예상 시간은 노트북의 `RUN_ENV`, `MAX_EPOCHS`, `OPTUNA_TRIALS`, `N_FOLDS`, `FAST_TEST` 설정을 기준으로 계산됩니다.
+예상 시간은 노트북의 `RUN_ENV`, `HARDWARE_PROFILE`, `MAX_EPOCHS`, `OPTUNA_TRIALS`, `N_FOLDS`, `FAST_TEST` 설정을 기준으로 계산됩니다.
 
-| 환경 | 1 Fold 기준 | 2단계 최종 학습 기준 |
+| 환경/GPU 프로필 | 1 Fold 기준 | 2단계 최종 학습 기준 |
 | --- | --- | --- |
-| Colab A100 | 약 18분 | epoch당 약 6분, 5 epoch 기준 약 30분 |
-| Kaggle | 약 66분 | epoch당 약 59분, 5 epoch 기준 약 295분 |
+| `colab_a100` | 약 18분 | epoch당 약 6분, 5 epoch 기준 약 30분 |
+| `colab_t4` | 약 132분 | epoch당 약 118분, 5 epoch 기준 약 590분 |
+| `kaggle_t4_x2` | 약 66분 | epoch당 약 59분, 5 epoch 기준 약 295분 |
+
+`HARDWARE_PROFILE="auto"`이면 `RUN_ENV="kaggle"`일 때 `kaggle_t4_x2`, `RUN_ENV="colab"`일 때 `colab_a100` 기준을 사용합니다. Colab에서 A100이 아니라 단일 T4를 사용하는 경우 `HARDWARE_PROFILE="colab_t4"`로 바꾸면 됩니다. Colab 단일 T4 시간은 Kaggle T4 x2 기준의 약 2배로 추정했습니다.
 
 필요하면 노트북에서 `CUSTOM_FOLD_TIME_MINS` 또는 `CUSTOM_STAGE2_EPOCH_TIME_MINS` 값을 0보다 크게 설정해 예상 시간을 직접 덮어쓸 수 있습니다.
 
