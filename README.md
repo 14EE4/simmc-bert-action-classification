@@ -130,6 +130,14 @@ DROPOUT_MAX = 0.4
 
 학습된 모델 체크포인트는 실행 환경에 맞는 `Saved_Models` 디렉터리에 저장됩니다. 뒤쪽의 평가 및 시각화 셀은 첫 셀에서 정의한 `output_dir`, `save_dir`, `TARGET_DF_PATH`, `resolve_model_path()`를 사용해 저장된 모델을 찾습니다.
 
+저장된 모델을 불러오는 평가/시각화 셀에서는 `MODEL_LOAD_MODE`로 사용할 모델을 선택할 수 있습니다.
+
+| Mode | 설명 |
+| --- | --- |
+| `latest_stage2` | `Stage2_Best_Model*.pt` 중 가장 최근 파일을 우선 사용 |
+| `latest_any` | 저장 폴더의 `.pt` 파일 중 가장 최근 파일 사용 |
+| `manual` | `MANUAL_MODEL_PATH`에 직접 입력한 모델 파일 사용 |
+
 ## 데이터 라이선스
 
 `data/` 폴더에 업로드하는 전처리 CSV 파일은 SIMMC 데이터셋을 기반으로 가공한 데이터입니다. 따라서 비상업적 연구 및 교육 목적으로만 공유하며, 원본 SIMMC 데이터셋과 동일하게 CC BY-NC-SA 4.0 라이선스 조건을 따릅니다.
