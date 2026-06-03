@@ -130,6 +130,18 @@ DROPOUT_MAX = 0.4
 
 학습된 모델 체크포인트는 실행 환경에 맞는 `Saved_Models` 디렉터리에 저장됩니다. 뒤쪽의 평가 및 시각화 셀은 첫 셀에서 정의한 `output_dir`, `save_dir`, `TARGET_DF_PATH`, `resolve_model_path()`를 사용해 저장된 모델을 찾습니다.
 
+2단계 최종 모델은 `Final_Test_Data.csv` 평가가 끝난 뒤 최종 Test Accuracy와 Test Macro F1을 파일명에 포함해 저장됩니다.
+
+```text
+Stage2_Best_Model_TestAcc_0.xxxx_TestF1_0.xxxx.pt
+```
+
+예를 들어 최종 Test Accuracy가 `0.7837`, Test Macro F1이 `0.6102`이면 아래와 같은 이름으로 저장됩니다.
+
+```text
+Stage2_Best_Model_TestAcc_0.7837_TestF1_0.6102.pt
+```
+
 저장된 모델을 불러오는 평가/시각화 셀에서는 `MODEL_LOAD_MODE`로 사용할 모델을 선택할 수 있습니다.
 
 | Mode | 설명 |
